@@ -1,6 +1,4 @@
 from __future__ import generators
-from google_calendar.httplib2 import socks, iri2uri
-
 """
 httplib2
 
@@ -57,10 +55,11 @@ import hmac
 from gettext import gettext as _
 import socket
 
-try: \
+try:
+    from httplib2 import socks
 except ImportError:
     try:
-        import google_calendar.httplib2.socks
+        import socks
     except (ImportError, AttributeError):
         socks = None
 
@@ -92,7 +91,8 @@ except (AttributeError, ImportError):
         return httplib.FakeSocket(sock, ssl_sock)
 
 
-if sys.version_info >= (2,3): \
+if sys.version_info >= (2,3):
+    from iri2uri import iri2uri
 else:
     def iri2uri(uri):
         return uri
