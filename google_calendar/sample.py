@@ -63,6 +63,7 @@ g_calendar = namedtuple(
     ]
 )
 
+service = None
 
 # Parser for command-line arguments.
 parser = argparse.ArgumentParser(
@@ -96,7 +97,7 @@ def initialize():
     storage = file.Storage('sample.dat')
     credentials = storage.get()
     if credentials is None or credentials.invalid:
-        credentials = tools.run_flow(FLOW, storage, flags)
+        credentials = tools.run_flow(FLOW, storage) #, flags)
 
     # Create an httplib2.Http object to handle our HTTP requests and authorize it
     # with our good Credentials.
