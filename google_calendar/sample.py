@@ -154,11 +154,15 @@ def main(argv):
     flags = parser.parse_args(argv[1:])
     service = initialize()
 
+    return service
+
+
+def get_events(service):
+
     try:
         #print "Success! Now add code here."
         calendar_id = '8fmqekkir19l3fdqpmagogsah4@group.calendar.google.com'
         page_token = None
-        _fs = '%d.%m.%Y %H:%M'
         event_list = []
 
         # Source: https://developers.google.com/google-apps/calendar/v3/reference/calendarList/list?hl=de
@@ -169,26 +173,31 @@ def main(argv):
             for event in events['items']:
                 event_list.append(make_g_event(event))
 
-            for g_event in event_list:
-                if g_event.description:
-                    cmd = g_event.description.split(':')[0]
-                    temp = g_event.description.split(':')[1]
-                    start = g_event.start.strftime(_fs)
-                    end = g_event.end.strftime(_fs)
-
-                print('{}: Heizung {}{}{}'.format(g_event.summary,
-                                                  'einschalten' if cmd == 'on' else 'ausschalten',
-                                                  ' auf {} °C'.format(temp) if cmd == 'on' else '',
-                                                  ' von {} bis {}'.format(start, end) if cmd == 'on' else ''
-                ))
-                #print('Ort: {}'.format(event.location))
-
             page_token = events.get('nextPageToken')
             if not page_token:
                 break
 
     except client.AccessTokenRefreshError:
         print ("The credentials have been revoked or expired, please re-run the application to re-authorize")
+
+    return event_list
+
+def output(event_list):
+    _fs = '%d.%m.%Y %H:%M'
+    for g_event in event_list:
+        if g_event.description:
+            cmd = g_event.description.split(':')[0]
+            temp = g_event.description.split(':')[1]
+            start = g_event.start.strftime(_fs)
+            end = g_event.end.strftime(_fs)
+
+        print('{}: Heizung {}{}{}'.format(g_event.summary,
+                                          'einschalten' if cmd == 'on' else 'ausschalten',
+                                          ' auf {} °C'.format(temp) if cmd == 'on' else '',
+                                          ' von {} bis {}'.format(start, end) if cmd == 'on' else ''
+        ))
+        #print('Ort: {}'.format(event.location))
+
 
 
 # For more information on the Calendar API you can visit:
@@ -204,4 +213,5 @@ def main(argv):
 #
 #   https://developers.google.com/api-client-library/python/start/get_started
 if __name__ == '__main__':
-    main(sys.argv)
+    service = main(sys.argv)
+    output(get_events(service))
