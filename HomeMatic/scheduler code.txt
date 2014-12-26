@@ -1,0 +1,42 @@
+! code for different scheduler
+! Each section is the script content of a program, scheduled for the relevant interval
+! Each section reads one fav_list and executes all programs in them
+
+var fav_1min_update = dom.GetObject('Fav_1min_update');
+
+if (fav_1min_update.Count()) {
+	foreach(itemID, fav_1min_update.EnumUsedIDs()) {
+		var prg_obj = dom.GetObject(itemID);
+		prg_obj.ProgramExecute()
+	}
+}
+
+
+var fav_30min_update = dom.GetObject('Fav_30min_update');
+
+if (fav_30min_update.Count()) {
+	foreach(itemID, fav_30min_update.EnumUsedIDs()) {
+		var prg_obj = dom.GetObject(itemID);
+		prg_obj.ProgramExecute()
+	}
+}
+
+
+var fav_1hour_update = dom.GetObject('Fav_1hour_update');
+
+if (fav_1hour_update.Count()) {
+	foreach(itemID, fav_1hour_update.EnumUsedIDs()) {
+		var prg_obj = dom.GetObject(itemID);
+		prg_obj.ProgramExecute()
+	}
+}
+
+
+var fav_daily_update = dom.GetObject('Fav_daily_update');
+
+if (fav_daily_update.Count()) {
+	foreach(itemID, fav_daily_update.EnumUsedIDs()) {
+		var prg_obj = dom.GetObject(itemID);
+		prg_obj.ProgramExecute()
+	}
+}
